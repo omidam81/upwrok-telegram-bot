@@ -58,6 +58,7 @@ feeder.on('new-item', function(item) {
              || skills.indexOf("c++") >= 0
              || skills.indexOf("delphi") >= 0
              || skills.indexOf("html") >= 0
+             || skills.indexOf(".net") >= 0
     
 
     text = `${item.title} 
