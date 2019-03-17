@@ -176,6 +176,6 @@ new CronJob('30 * * * * *', function() {
 
 var connect = require('connect');
 var serveStatic = require('serve-static');
-connect().use(serveStatic(__dirname + "/public/")).listen(80, function(){
-    console.log('Server running on 80...');
+connect().use(serveStatic(__dirname + "/public/")).listen(81, function(){
+    console.log('Server running on 81...');
 });
