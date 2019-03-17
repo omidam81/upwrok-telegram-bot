@@ -168,7 +168,7 @@ function newItem (item){
 
 var CronJob = require('cron').CronJob;
 new CronJob('30 * * * * *', function() {
-   // getNewUrls();
+   getNewUrls();
 }, null, true, 'America/Los_Angeles');
 
 
@@ -176,6 +176,6 @@ new CronJob('30 * * * * *', function() {
 
 var connect = require('connect');
 var serveStatic = require('serve-static');
-connect().use(serveStatic(__dirname + "/public/")).listen(8080, function(){
-    console.log('Server running on 8080...');
+connect().use(serveStatic(__dirname + "/public/")).listen(80, function(){
+    console.log('Server running on 80...');
 });
