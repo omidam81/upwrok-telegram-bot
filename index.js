@@ -12,6 +12,19 @@ db.defaults({ chats: []})
   .write()
 
 
+const adapter2 = new FileSync('db2.json')
+const db2 = low(adapter)
+db2.defaults({ chats: []})
+  .write()
+
+
+var api2 = new telegram({
+    token: '800595712:AAEr1Dg04kuH_UzRQdsl1Vtp8sz24N5X4KE',
+    updates: {
+        enabled: true
+    }
+});
+
 
 
 let feeder = new RssFeedEmitter();
@@ -67,7 +80,6 @@ feeder.on('new-item', function(item) {
         var items =  db.get('chats')
             .map('id')
             .value()
-        console.log(items)
         for(var i in items){
             console.log("items", items[i]);
             api.sendMessage({
@@ -96,15 +108,74 @@ api.on('message', function(message)
 });
 
 
+api2.on('message', function(message)
+{
+    var id = db2.get('chats')
+        .find({ id: message.chat.id })
+        .value();
+    if(!id)
+        db2.get('chats')
+        .push({ id: message.chat.id})
+        .write()
+});
+
+
+var request = require("request")
+
+var time_submitted = -1;
+function getNewUrls (){
+    request({
+        url: `https://www.freelancer.com/api/projects/0.1/projects/active/?compact=true&full_description=true&job_details=true&jobs%5B%5D=690&jobs%5B%5D=106&jobs%5B%5D=500&jobs%5B%5D=9&jobs%5B%5D=247&jobs%5B%5D=323&jobs%5B%5D=3&jobs%5B%5D=759&jobs%5B%5D=1314&jobs%5B%5D=69&keywords=&limit=10&min_avg_hourly_rate=18&min_avg_price=500&offset=0&project_types%5B%5D=fixed&project_types%5B%5D=hourly&query=&sort_field=submitdate&upgrade_details=true&user_details=true&user_employer_reputation=true&user_status=true`,
+        json: true
+    }, function (error, response, body) {
+        //console.log(body.result);
+        if (!error && response.statusCode === 200) {
+            var res = body.result.projects.sort(
+                (a, b)=> {
+                    return a.time_submitted - b.time_submitted;
+                }
+            ).filter(a=> a.time_submitted > time_submitted);
+            if(res.length > 0)
+                time_submitted = res.slice(-1)[0].time_submitted;
+            for(var p in res)
+            {
+               newItem(res[p]);
+            }
+        }
+    });
+}
+
+var lastTimeCheck = -1;
+temp_time_updated = -1;
+function newItem (item){
+    var text = `${item.title} 
+    https://www.freelancer.com/projects/${item.seo_url}`
+            
+        var items =  db2.get('chats')
+            .map('id')
+            .value()
+        for(var i in items){
+            
+            api2.sendMessage({
+                chat_id: items[i],
+                text: text
+            }, {
+                "parse_mode" :'HTML'
+            });
+        }
+    }
+
+
 var CronJob = require('cron').CronJob;
-new CronJob('* * * * * 59', function() {
-   console.log('You will see this message every second');
+new CronJob('30 * * * * *', function() {
+    getNewUrls();
 }, null, true, 'America/Los_Angeles');
 
 
 
 
-http.createServer(function (req, res) {
-   console.log("server started at 8080")
-}).listen(3000);
-
+var connect = require('connect');
+var serveStatic = require('serve-static');
+connect().use(serveStatic(__dirname + "/public/")).listen(8080, function(){
+    console.log('Server running on 8080...');
+});
