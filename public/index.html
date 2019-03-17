@@ -1,0 +1,273 @@
+<html ng-app='propsal-app'>
+
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.slim.min.js"></script>
+    <script src="https://unpkg.com/popper.js@1.14.7/dist/umd/popper.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.7/angular.min.js"></script>
+    <title>Propsal helper</title>
+
+    <script>
+        angular.module('propsal-app', []).controller('propsalController', function () {
+            var propsalApp = this;
+            propsalApp.projects = {
+                "bigwebsite": [
+                    {
+                        "url": "https://skootjobs.com",
+                        "desc": "One of the biggest job platforms in Malaysia it using Nodejs, Loopback, Angularjs, MongoDB and AWS",
+                        "more": "I was the senior programmer and CTO on this project",
+                        "tags": "Nodejs, Loopback, Angularjs, MongoDB, AWS"
+                    },
+                    {
+                        "url": "https://betcoin.ag",
+                        "desc": "it was online Casino, it use Nodejs, Vue.js, MongoDB, Cryptocurrency, BitCoin, ExpressJS, Check codes here: https://github.com/omidam81/betcoin",
+                        "more": "Programmer and Senior Programmer",
+                        "tags": "Nodejs, Vue.js, MongoDB, BitCoin, ExpressJS"
+                    },
+                    {
+                        "url": "https://payrollpanda.my",
+                        "desc": "it was online payroll tools, it use Nodejs, Vue.js, MongoDB, ExpressJS, Online Payments",
+                        "more": "Programmer and Senior Programmer",
+                        "tags": "Nodejs, Vue.js, MongoDB, ExpressJS, Online Payment"
+                    }
+                ],
+                "cSharp": [
+                    {
+                        "url": "https://github.com/omidam81/TwitterAtomationWa",
+                        "desc": "Tools for manage Twitter Account, it can manage more than 1000 accounts in one single computer",
+                        "more": "Programmer",
+                        "tags": "C#, Twitter API, Twitter Automation, API"
+                    },
+                    {
+                        "url": "https://github.com/omidam81/pinterest-follow",
+                        "desc": "Tools for manage Pinterest Account and get more follower for you",
+                        "more": "I was programmer",
+                        "tags": "C#, Pinterest, Pinterest Automation"
+                    },
+                    {
+                        "url": "https://github.com/omidam81/teeyoot.com",
+                        "desc": "Website for selling and designing T-Shirt",
+                        "more": "I was programmer, senior programmer, CTO",
+                        "tags": "C#, onnline payment, website, online design tools"
+                    },
+                    {
+                        "url": "https://github.com/omidam81/wiki.answer.com \n https://github.com/omidam81/youtube_bot_gui",
+                        "desc": "tools for scraping",
+                        "more": "Programmer",
+                        "tags": "Please check the codes"
+                    },
+                    {
+                        "url": "https://github.com/omidam81/print3d-v2",
+                        "desc": "Windows desktop application for connect and feed 3d printer",
+                        "more": "I was programmer, senior programmer, CTO",
+                        "tags": "C#, desktop application, 3d view, GUI, VR, 3d Software"
+                    }
+                ],
+                "htmlsamples": [
+                    {
+                        "url": "http://pixdevelopers.com/samples/aml/"
+                    },
+                    {
+                        "url": "http://pixdevelopers.com/samples/teeyoot/"
+                    },
+                    {
+                        "url": "http://pixdevelopers.com/samples/regina/"
+                    },
+                    {
+                        "url": "http://pixdevelopers.com/samples/starry-night/"
+                    },
+                    {
+                        "url": "http://pixdevelopers.com/samples/cafe-verd/"
+                    }
+
+                ],
+                "wpproject": [
+                    {
+                        "url": "http://wearehighwater.com"
+                    },
+                    {
+                        "url": "http://cescapheblack.com/"
+                    },
+                    {
+                        "url": "http://www.ewoadvisors.com/"
+                    },
+                    {
+                        "url": "https://www.acmecryo.com/"
+                    },
+                    {
+                        "url": "https://www.snapdivorce.com/"
+                    },
+                    {
+                        "url": "http://nahidbaradaran.com/en/"
+                    },
+                ]
+            };
+
+            getLinkInfo = function(items){
+                return items.reduce((all, a)=> {
+                    let x = '';
+                    let desc = '';
+                    if(a.includeMe) {x += a.url;
+                    if(a.includeMe && a.includeDesc) desc += a.desc;
+                    if(a.includeMe && a.includeMore){
+                        if(desc) desc += ", " + a.more;
+                        else desc += a.more;
+                    }
+                    if(desc) x = x + "(" +  desc + ")";
+                    return all + "\n" + x;}
+                    else{
+                        return all;
+                    }
+
+
+                }, '\n');
+            }
+            propsalApp.change = function(){
+                var x = getLinkInfo(propsalApp.projects.bigwebsite);
+                x += "\n" + getLinkInfo(propsalApp.projects.cSharp);
+                x += "\n" + getLinkInfo(propsalApp.projects.htmlsamples);
+                x += "\n" + getLinkInfo(propsalApp.projects.wpproject);
+
+                x = x.replace("\n\n", '\n');
+                x = x.replace("\n\n", '\n');
+                x = x.replace("\n\n", '\n');
+
+                propsalApp.links = x;
+            };
+        });
+
+        
+
+    </script>
+</head>
+
+<body ng-controller="propsalController as propsal">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="container-fluid">
+                    <h2>Properties</h2>
+                    <div class="row">
+                        <div class="col-md-2"> <label>Special Word:</label> </div>
+                        <div class="col"> <input type="text" ng-model="propsal.specialWord" placeholder="Special Word">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-2"> <label>Name:</label> </div>
+                        <div class="col"> <input type="text" ng-model="propsal.name" placeholder="Enter a name here">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-2"> <label>experience:</label> </div>
+                        <div class="col"> <input type="text" ng-model="propsal.experience"
+                                placeholder="Enter a name here">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-2"> <label>skills :</label> </div>
+                        <div class="col"> <input type="text" ng-model="propsal.skills" placeholder="Enter a name here">
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-md-2"> <label>skills :</label> </div>
+                        <div class="col"> <input type="text" ng-model="propsal.skills" placeholder="Enter a name here">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-2">
+                            <input type="checkbox" ng-model='propsal.resumeAttached' checked />
+                            Resume Attached
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-2">Some Extra info</div>
+                        <div class="col">
+                            <textarea ng-model='propsal.moreinfo' row='5' column='40'></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="container-fluid">
+                    <h1 class="row">Samples</h1>
+                    <div class="row">
+                        <h3>Big Online project</h3>
+                        <div ng-repeat='p in propsal.projects.bigwebsite' class="col-md-12">
+                            <div><input ng-model='p.includeMe' type="checkbox" ng-change="propsal.change()" /> {{p.url}}</div>
+                            <p style='padding-left: 20px; background-color:azure'> 
+                                <input ng-model='p.includeDesc' type="checkbox" ng-change="propsal.change()"/> include desc
+                                <input ng-model='p.includeMore' type="checkbox" ng-change="propsal.change()"/> include More
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <h3>Csharp project</h3>
+                        <div ng-repeat='p in propsal.projects.cSharp' class="col-md-12">
+                            <div><input ng-model='p.includeMe' type="checkbox" ng-change="propsal.change()"/> {{p.url}}</div>
+                            <p style='padding-left: 20px; background-color:azure'>
+                                <input ng-model='p.includeDesc' type="checkbox" ng-change="propsal.change()"/> include desc
+                                <input ng-model='p.includeMore' type="checkbox" ng-change="propsal.change()"/> include More
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <h3>HTML Project</h3>
+                        <div ng-repeat='p in propsal.projects.htmlsamples' class="col-md-12">
+                            <div> <input ng-model='p.includeMe' type="checkbox" ng-change="propsal.change()"/> {{p.url}}</div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <h3>WP Project</h3>
+                        <div ng-repeat='p in propsal.projects.wpproject' class="col-md-12">
+                            <div> <input ng-model='p.includeMe' type="checkbox" ng-change="propsal.change()"/> {{p.url}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr />
+    <div class="row">
+        <div class="col">
+            <textarea style="width:100%" rows="10">
+{{propsal.specialWord}}
+Hi,
+            
+My name is {{propsal.name}}, I have more than {{propsal.experience}} years experience in {{propsal.skills}}, I can help with this
+project,
+
+If you need to see more work of mine please check the following links:
+{{propsal.links}}
+
+{{propsal.moreinfo}}
+{{(propsal.resumeAttached)? 'My resume also attached.':''}}
+
+Thanks,
+{{propsal.name}}
+</textarea>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <button onclick="document.execCommand('copy');">Copy</button>
+        </div>
+    </div>
+
+    </div>
+</body>
+
+</html>
