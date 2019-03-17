@@ -168,7 +168,7 @@ function newItem (item){
 
 var CronJob = require('cron').CronJob;
 new CronJob('30 * * * * *', function() {
-   getNewUrls();
+   //getNewUrls();
 }, null, true, 'America/Los_Angeles');
 
 
