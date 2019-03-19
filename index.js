@@ -93,6 +93,8 @@ api.on('message', function(message)
     var id = db.get('chats')
         .find({ id: message.chat.id })
         .value()
+    console.log("xxxxxxx", id);
+
     if(!id)
         db.get('chats')
         .push({ id: message.chat.id})
