@@ -90,7 +90,7 @@ feeder.on('new-item', function(item) {
 
 api.on('message', function(message)
 {
-    var id = db.get('posts')
+    var id = db.get('chats')
         .find({ id: message.chat.id })
         .value()
     if(!id)
@@ -105,6 +105,8 @@ api2.on('message', function(message)
     var id = db2.get('chats')
         .find({ id: message.chat.id })
         .value();
+    console.log(id);
+
     if(!id)
         db2.get('chats')
         .push({ id: message.chat.id})
