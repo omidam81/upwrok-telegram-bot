@@ -13,7 +13,7 @@ db.defaults({ chats: []})
 
 
 const adapter2 = new FileSync('db2.json')
-const db2 = low(adapter)
+const db2 = low(adapter2)
 db2.defaults({ chats: []})
   .write()
 
@@ -47,19 +47,12 @@ let chat_id = '';
 
 
 feeder.on('new-item', function(item) {
-
-  
     let text = item.summary;
-
     let skills = text.substring(text.indexOf("<b>Skills</b>:") + "<b>Skills</b>:".length, text.indexOf("<b>Country</b>:"));
     let remian = text.substring(text.indexOf("<b>Country</b>:"));
     let country = remian.substring("<b>Country</b>:".length, remian.indexOf("<br />"));
     let links = item.link;
-    console.log(chat_id);
-
-    //////if(!chat_id) return;
     skills = skills.toLowerCase();
-
     let b1 = skills.indexOf("node.js") >= 0
              || skills.indexOf("c#") >= 0
              || skills.indexOf("angularjs") >= 0
@@ -81,7 +74,6 @@ feeder.on('new-item', function(item) {
             .map('id')
             .value()
         for(var i in items){
-            console.log("items", items[i]);
             api.sendMessage({
                 chat_id: items[i],
                 text: text
@@ -124,10 +116,12 @@ var request = require("request")
 
 var time_submitted = -1;
 function getNewUrls (){
+    console.log("hererererer");
     request({
         url: `https://www.freelancer.com/api/projects/0.1/projects/active/?compact=true&full_description=true&job_details=true&jobs%5B%5D=690&jobs%5B%5D=106&jobs%5B%5D=500&jobs%5B%5D=9&jobs%5B%5D=247&jobs%5B%5D=323&jobs%5B%5D=3&jobs%5B%5D=759&jobs%5B%5D=1314&jobs%5B%5D=69&keywords=&limit=10&min_avg_hourly_rate=18&min_avg_price=500&offset=0&project_types%5B%5D=fixed&project_types%5B%5D=hourly&query=&sort_field=submitdate&upgrade_details=true&user_details=true&user_employer_reputation=true&user_status=true`,
         json: true
     }, function (error, response, body) {
+
         //console.log(body.result);
         if (!error && response.statusCode === 200) {
             var res = body.result.projects.sort(
@@ -154,10 +148,10 @@ function newItem (item){
         var items =  db2.get('chats')
             .map('id')
             .value()
-        for(var i in items){
-            
+        for(var xi in items){
+            console.log("xxxxxx", xi);
             api2.sendMessage({
-                chat_id: items[i],
+                chat_id: items[xi],
                 text: text
             }, {
                 "parse_mode" :'HTML'
@@ -168,7 +162,7 @@ function newItem (item){
 
 var CronJob = require('cron').CronJob;
 new CronJob('30 * * * * *', function() {
-   //getNewUrls();
+   getNewUrls();
 }, null, true, 'America/Los_Angeles');
 
 
