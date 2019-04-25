@@ -69,7 +69,7 @@ feeder.on('new-item', function (item) {
 
 
         || skills.indexOf("spss") >= 0
-        || skills.indexOf("r") >= 0
+        || skills.indexOf(" r ") >= 0
         || skills.indexOf("s-plus") >= 0
         || skills.indexOf("statistical packages") >= 0
         || skills.indexOf("statistical analysis") >= 0
