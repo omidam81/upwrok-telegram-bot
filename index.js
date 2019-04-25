@@ -8,14 +8,14 @@ const low = require('lowdb')
 const FileSync = require('lowdb/adapters/FileSync')
 const adapter = new FileSync('db.json')
 const db = low(adapter)
-db.defaults({ chats: []})
-  .write()
+db.defaults({ chats: [] })
+    .write()
 
 
 const adapter2 = new FileSync('db2.json')
 const db2 = low(adapter2)
-db2.defaults({ chats: []})
-  .write()
+db2.defaults({ chats: [] })
+    .write()
 
 
 var api2 = new telegram({
@@ -29,9 +29,9 @@ var api2 = new telegram({
 
 let feeder = new RssFeedEmitter();
 var api = new telegram({
-        token: '721094854:AAGMj4UhmF29WbwNQXAyRrEKLOI1qJQPZM4',
-        updates: {
-        	enabled: true
+    token: '721094854:AAGMj4UhmF29WbwNQXAyRrEKLOI1qJQPZM4',
+    updates: {
+        enabled: true
     }
 });
 
@@ -39,14 +39,14 @@ var api = new telegram({
 feeder.add({
     url: 'https://www.upwork.com/ab/feed/topics/atom?securityToken=1aa3bb563e03536d87b7dd06f0c22c9b6fd2c4991a37d602c995b3d106c8b0177451b3e1c104b1cfea6068e1fa5b83bd7b4aa27204dbc271af58f90d1e837762&userUid=641972342928629760&orgUid=641972342932824065',
     refresh: 2000
-  });
+});
 
 
 
 let chat_id = '';
 
 
-feeder.on('new-item', function(item) {
+feeder.on('new-item', function (item) {
     let text = item.summary;
     let skills = text.substring(text.indexOf("<b>Skills</b>:") + "<b>Skills</b>:".length, text.indexOf("<b>Country</b>:"));
     let remian = text.substring(text.indexOf("<b>Country</b>:"));
@@ -54,72 +54,85 @@ feeder.on('new-item', function(item) {
     let links = item.link;
     skills = skills.toLowerCase();
     let b1 = skills.indexOf("node.js") >= 0
-             || skills.indexOf("c#") >= 0
-             || skills.indexOf("angularjs") >= 0
-             || skills.indexOf("vue.js") >= 0
-             || skills.indexOf("javascript") >= 0
-             || skills.indexOf("react.js") >= 0
-             || skills.indexOf("jquery") >= 0
-             || skills.indexOf("haskell") >= 0
-             || skills.indexOf("c++") >= 0
-             || skills.indexOf("delphi") >= 0
-             || skills.indexOf("html") >= 0
-             || skills.indexOf(".net") >= 0
-    
+        || skills.indexOf("c#") >= 0
+        || skills.indexOf("angularjs") >= 0
+        || skills.indexOf("vue.js") >= 0
+        || skills.indexOf("javascript") >= 0
+        || skills.indexOf("react.js") >= 0
+        || skills.indexOf("jquery") >= 0
+        || skills.indexOf("haskell") >= 0
+        || skills.indexOf("c++") >= 0
+        || skills.indexOf("delphi") >= 0
+        || skills.indexOf("html") >= 0
+        || skills.indexOf(".net") >= 0
+
+
+
+        || skills.indexOf("spss") >= 0
+        || skills.indexOf("r") >= 0
+        || skills.indexOf("s-plus") >= 0
+        || skills.indexOf("statistical packages") >= 0
+        || skills.indexOf("statistical analysis") >= 0
+        || skills.indexOf("data analysis") >= 0
+        || skills.indexOf("regression") >= 0
+        || skills.indexOf("time series analysis") >= 0
+        || skills.indexOf("spatial data analysis") >= 0
+        || skills.indexOf("multivariate analysis") >= 0
+        || skills.indexOf("outlier detection") >= 0
+        || skills.indexOf("small area estimation") >= 0
+        || skills.indexOf("questionnaire analysis") >= 0
 
     text = `${item.title} 
                 ${links}`
-    if(b1){
-        var items =  db.get('chats')
+    if (b1) {
+        var items = db.get('chats')
             .map('id')
             .value()
-        for(var i in items){
+        for (var i in items) {
             api.sendMessage({
                 chat_id: items[i],
                 text: text
             }, {
-                "parse_mode" :'HTML'
-            });
+                    "parse_mode": 'HTML'
+                });
         }
-       
+
     }
-    
+
 });
 
 
 
-api.on('message', function(message)
-{
+api.on('message', function (message) {
     var id = db.get('chats')
         .find({ id: message.chat.id })
         .value()
     console.log("xxxxxxx", id);
 
-    if(!id)
+    if (!id)
         db.get('chats')
-        .push({ id: message.chat.id})
-        .write()
+            .push({ id: message.chat.id })
+            .write()
 });
 
 
-api2.on('message', function(message)
-{
+api2.on('message', function (message) {
     var id = db2.get('chats')
         .find({ id: message.chat.id })
         .value();
     console.log(id);
 
-    if(!id)
+    if (!id)
         db2.get('chats')
-        .push({ id: message.chat.id})
-        .write()
+            .push({ id: message.chat.id })
+            .write()
 });
 
 
 var request = require("request")
 
 var time_submitted = -1;
-function getNewUrls (){
+function getNewUrls() {
     console.log("hererererer");
     request({
         url: `https://www.freelancer.com/api/projects/0.1/projects/active/?compact=true&full_description=true&job_details=true&jobs%5B%5D=690&jobs%5B%5D=106&jobs%5B%5D=500&jobs%5B%5D=9&jobs%5B%5D=247&jobs%5B%5D=323&jobs%5B%5D=3&jobs%5B%5D=759&jobs%5B%5D=1314&jobs%5B%5D=69&keywords=&limit=10&min_avg_hourly_rate=18&min_avg_price=500&offset=0&project_types%5B%5D=fixed&project_types%5B%5D=hourly&query=&sort_field=submitdate&upgrade_details=true&user_details=true&user_employer_reputation=true&user_status=true`,
@@ -129,15 +142,14 @@ function getNewUrls (){
         //console.log(body.result);
         if (!error && response.statusCode === 200) {
             var res = body.result.projects.sort(
-                (a, b)=> {
+                (a, b) => {
                     return a.time_submitted - b.time_submitted;
                 }
-            ).filter(a=> a.time_submitted > time_submitted);
-            if(res.length > 0)
+            ).filter(a => a.time_submitted > time_submitted);
+            if (res.length > 0)
                 time_submitted = res.slice(-1)[0].time_submitted;
-            for(var p in res)
-            {
-               newItem(res[p]);
+            for (var p in res) {
+                newItem(res[p]);
             }
         }
     });
@@ -145,28 +157,28 @@ function getNewUrls (){
 
 var lastTimeCheck = -1;
 temp_time_updated = -1;
-function newItem (item){
+function newItem(item) {
     var text = `${item.title} 
     https://www.freelancer.com/projects/${item.seo_url}`
-            
-        var items =  db2.get('chats')
-            .map('id')
-            .value()
-        for(var xi in items){
-            console.log("xxxxxx", xi);
-            api2.sendMessage({
-                chat_id: items[xi],
-                text: text
-            }, {
-                "parse_mode" :'HTML'
+
+    var items = db2.get('chats')
+        .map('id')
+        .value()
+    for (var xi in items) {
+        console.log("xxxxxx", xi);
+        api2.sendMessage({
+            chat_id: items[xi],
+            text: text
+        }, {
+                "parse_mode": 'HTML'
             });
-        }
     }
+}
 
 
 var CronJob = require('cron').CronJob;
-new CronJob('30 * * * * *', function() {
-   getNewUrls();
+new CronJob('30 * * * * *', function () {
+    getNewUrls();
 }, null, true, 'America/Los_Angeles');
 
 
@@ -174,6 +186,6 @@ new CronJob('30 * * * * *', function() {
 
 var connect = require('connect');
 var serveStatic = require('serve-static');
-connect().use(serveStatic(__dirname + "/public/")).listen(8000, function(){
+connect().use(serveStatic(__dirname + "/public/")).listen(8000, function () {
     console.log('Server running on 81...');
 });
