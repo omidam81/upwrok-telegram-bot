@@ -107,26 +107,28 @@
                 ]
             };
 
-            getLinkInfo = function(items){
-                return items.reduce((all, a)=> {
+            getLinkInfo = function (items) {
+                return items.reduce((all, a) => {
                     let x = '';
                     let desc = '';
-                    if(a.includeMe) {x += a.url;
-                    if(a.includeMe && a.includeDesc) desc += a.desc;
-                    if(a.includeMe && a.includeMore){
-                        if(desc) desc += ", " + a.more;
-                        else desc += a.more;
+                    if (a.includeMe) {
+                        x += a.url;
+                        if (a.includeMe && a.includeDesc) desc += a.desc;
+                        if (a.includeMe && a.includeMore) {
+                            if (desc) desc += ", " + a.more;
+                            else desc += a.more;
+                        }
+                        if (desc) x = x + "(" + desc + ")";
+                        return all + "\n" + x;
                     }
-                    if(desc) x = x + "(" +  desc + ")";
-                    return all + "\n" + x;}
-                    else{
+                    else {
                         return all;
                     }
 
 
                 }, '\n');
             }
-            propsalApp.change = function(){
+            propsalApp.change = function () {
                 var x = getLinkInfo(propsalApp.projects.bigwebsite);
                 x += "\n" + getLinkInfo(propsalApp.projects.cSharp);
                 x += "\n" + getLinkInfo(propsalApp.projects.htmlsamples);
@@ -140,7 +142,7 @@
             };
         });
 
-        
+
 
     </script>
 </head>
@@ -152,50 +154,76 @@
                 <div class="container-fluid">
                     <h2>Properties</h2>
                     <div class="row">
-                        <div class="col-md-2"> <label>Special Word:</label> </div>
-                        <div class="col"> <input type="text" ng-model="propsal.specialWord" placeholder="Special Word">
+                        <div class="col form-group">
+                            <input type="text" class="form-control" ng-model="propsal.specialWord"
+                                placeholder="Special Word">
                         </div>
                     </div>
 
-                    <div class="row">
-                        <div class="col-md-2"> <label>Name:</label> </div>
-                        <div class="col"> <input type="text" ng-model="propsal.name" placeholder="Enter a name here">
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-2"> <label>experience:</label> </div>
-                        <div class="col"> <input type="text" ng-model="propsal.experience"
+                    <div class="row ">
+                        <div class="col form-group">
+                            <input type="text" class="form-control" ng-model="propsal.name"
                                 placeholder="Enter a name here">
                         </div>
                     </div>
 
                     <div class="row">
-                        <div class="col-md-2"> <label>skills :</label> </div>
-                        <div class="col"> <input type="text" ng-model="propsal.skills" placeholder="Enter a name here">
+
+                        <div class="col form-group">
+                            <input type="text" class="form-control" ng-model="propsal.experience"
+                                placeholder="Enter experience">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col form-group">
+                            <input type="text" class="form-control" ng-model="propsal.skills"
+                                placeholder="Enter skills here">
+                        </div>
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="defaultCheck1"
+                                ng-model='propsal.resumeAttached'>
+                            <label class="form-check-label" for="defaultCheck1">
+                                Resume Attached
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col form-group">
+                            <textarea class="form-control" ng-model='propsal.moreinfo' row='10' column='40'></textarea>
                         </div>
                     </div>
 
 
                     <div class="row">
-                        <div class="col-md-2"> <label>skills :</label> </div>
-                        <div class="col"> <input type="text" ng-model="propsal.skills" placeholder="Enter a name here">
+                        <div class="col form-group">
+                            <textarea class="form-control"  rows="10">{{propsal.specialWord}}
+Hi,    
+My name is {{propsal.name}}, I have more than {{propsal.experience}} years experience in {{propsal.skills}}, I can help with this
+project,
+If you need to see more work of mine please check the following links:
+{{propsal.links}}
+{{propsal.moreinfo}}
+{{(propsal.resumeAttached)? 'My resume also attached.':''}}
+Thanks,
+{{propsal.name}}
+                            </textarea>
                         </div>
                     </div>
-
                     <div class="row">
-                        <div class="col-md-2">
-                            <input type="checkbox" ng-model='propsal.resumeAttached' checked />
-                            Resume Attached
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-2">Some Extra info</div>
                         <div class="col">
-                            <textarea ng-model='propsal.moreinfo' row='5' column='40'></textarea>
+                            <button onclick="document.execCommand('copy');">Copy</button>
                         </div>
                     </div>
+
+
+
+
                 </div>
             </div>
             <div class="col-md-6">
@@ -204,10 +232,13 @@
                     <div class="row">
                         <h3>Big Online project</h3>
                         <div ng-repeat='p in propsal.projects.bigwebsite' class="col-md-12">
-                            <div><input ng-model='p.includeMe' type="checkbox" ng-change="propsal.change()" /> {{p.url}}</div>
-                            <p style='padding-left: 20px; background-color:azure'> 
-                                <input ng-model='p.includeDesc' type="checkbox" ng-change="propsal.change()"/> include desc
-                                <input ng-model='p.includeMore' type="checkbox" ng-change="propsal.change()"/> include More
+                            <div><input ng-model='p.includeMe' type="checkbox" ng-change="propsal.change()" /> {{p.url}}
+                            </div>
+                            <p style='padding-left: 20px; background-color:azure'>
+                                <input ng-model='p.includeDesc' type="checkbox" ng-change="propsal.change()" /> include
+                                desc
+                                <input ng-model='p.includeMore' type="checkbox" ng-change="propsal.change()" /> include
+                                More
                             </p>
                         </div>
                     </div>
@@ -215,10 +246,13 @@
                     <div class="row">
                         <h3>Csharp project</h3>
                         <div ng-repeat='p in propsal.projects.cSharp' class="col-md-12">
-                            <div><input ng-model='p.includeMe' type="checkbox" ng-change="propsal.change()"/> {{p.url}}</div>
+                            <div><input ng-model='p.includeMe' type="checkbox" ng-change="propsal.change()" /> {{p.url}}
+                            </div>
                             <p style='padding-left: 20px; background-color:azure'>
-                                <input ng-model='p.includeDesc' type="checkbox" ng-change="propsal.change()"/> include desc
-                                <input ng-model='p.includeMore' type="checkbox" ng-change="propsal.change()"/> include More
+                                <input ng-model='p.includeDesc' type="checkbox" ng-change="propsal.change()" /> include
+                                desc
+                                <input ng-model='p.includeMore' type="checkbox" ng-change="propsal.change()" /> include
+                                More
                             </p>
                         </div>
                     </div>
@@ -226,47 +260,20 @@
                     <div class="row">
                         <h3>HTML Project</h3>
                         <div ng-repeat='p in propsal.projects.htmlsamples' class="col-md-12">
-                            <div> <input ng-model='p.includeMe' type="checkbox" ng-change="propsal.change()"/> {{p.url}}</div>
+                            <div> <input ng-model='p.includeMe' type="checkbox" ng-change="propsal.change()" />
+                                {{p.url}}</div>
                         </div>
                     </div>
                     <div class="row">
                         <h3>WP Project</h3>
                         <div ng-repeat='p in propsal.projects.wpproject' class="col-md-12">
-                            <div> <input ng-model='p.includeMe' type="checkbox" ng-change="propsal.change()"/> {{p.url}}</div>
+                            <div> <input ng-model='p.includeMe' type="checkbox" ng-change="propsal.change()" />
+                                {{p.url}}</div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-
-    <hr />
-    <div class="row">
-        <div class="col">
-            <textarea style="width:100%" rows="10">
-{{propsal.specialWord}}
-Hi,
-            
-My name is {{propsal.name}}, I have more than {{propsal.experience}} years experience in {{propsal.skills}}, I can help with this
-project,
-
-If you need to see more work of mine please check the following links:
-{{propsal.links}}
-
-{{propsal.moreinfo}}
-{{(propsal.resumeAttached)? 'My resume also attached.':''}}
-
-Thanks,
-{{propsal.name}}
-</textarea>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col">
-            <button onclick="document.execCommand('copy');">Copy</button>
-        </div>
-    </div>
-
     </div>
 </body>
 
